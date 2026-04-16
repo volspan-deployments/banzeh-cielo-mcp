@@ -36,6 +36,7 @@ def get_headers() -> dict:
 
 @mcp.tool()
 async def create_credit_card_transaction(
+    _track("create_credit_card_transaction")
     merchant_order_id: str,
     customer_name: str,
     amount: int,
@@ -112,6 +113,7 @@ async def create_credit_card_transaction(
 
 @mcp.tool()
 async def create_debit_card_transaction(
+    _track("create_debit_card_transaction")
     merchant_order_id: str,
     customer_name: str,
     amount: int,
@@ -170,6 +172,7 @@ async def create_debit_card_transaction(
 
 @mcp.tool()
 async def create_boleto_transaction(
+    _track("create_boleto_transaction")
     merchant_order_id: str,
     customer_name: str,
     customer_identity: str,
@@ -261,6 +264,7 @@ async def create_boleto_transaction(
 
 @mcp.tool()
 async def capture_transaction(
+    _track("capture_transaction")
     payment_id: str,
     amount: Optional[int] = None,
     service_tax_amount: Optional[int] = None,
@@ -291,6 +295,7 @@ async def capture_transaction(
 
 @mcp.tool()
 async def cancel_transaction(
+    _track("cancel_transaction")
     payment_id: str,
     amount: Optional[int] = None,
 ) -> dict:
@@ -323,6 +328,7 @@ async def get_transaction_by_payment_id(payment_id: str) -> dict:
     Args:
         payment_id: The PaymentId (UUID) of the transaction to query.
     """
+    _track("get_transaction_by_payment_id")
     async with httpx.AsyncClient() as client:
         response = await client.get(
             f"{CIELO_QUERY_BASE}/1/sales/{payment_id}",
@@ -340,6 +346,7 @@ async def get_transaction_by_merchant_order_id(merchant_order_id: str) -> dict:
     Args:
         merchant_order_id: The merchant's order identifier to query transactions for.
     """
+    _track("get_transaction_by_merchant_order_id")
     async with httpx.AsyncClient() as client:
         response = await client.get(
             f"{CIELO_QUERY_BASE}/1/sales?merchantOrderId={merchant_order_id}",
@@ -351,6 +358,7 @@ async def get_transaction_by_merchant_order_id(merchant_order_id: str) -> dict:
 
 @mcp.tool()
 async def tokenize_card(
+    _track("tokenize_card")
     customer_name: str,
     card_number: str,
     card_holder: str,
@@ -393,6 +401,7 @@ async def get_tokenized_card(card_token: str) -> dict:
     Args:
         card_token: The card token UUID returned from tokenize_card.
     """
+    _track("get_tokenized_card")
     async with httpx.AsyncClient() as client:
         response = await client.get(
             f"{CIELO_QUERY_BASE}/1/card/{card_token}",
@@ -404,6 +413,7 @@ async def get_tokenized_card(card_token: str) -> dict:
 
 @mcp.tool()
 async def create_credit_card_transaction_with_token(
+    _track("create_credit_card_transaction_with_token")
     merchant_order_id: str,
     customer_name: str,
     amount: int,
@@ -459,6 +469,7 @@ async def create_credit_card_transaction_with_token(
 
 @mcp.tool()
 async def create_recurrent_payment(
+    _track("create_recurrent_payment")
     merchant_order_id: str,
     customer_name: str,
     amount: int,
@@ -538,6 +549,7 @@ async def get_recurrent_payment(recurrent_payment_id: str) -> dict:
     Args:
         recurrent_payment_id: The RecurrentPaymentId (UUID) to query.
     """
+    _track("get_recurrent_payment")
     async with httpx.AsyncClient() as client:
         response = await client.get(
             f"{CIELO_QUERY_BASE}/1/RecurrentPayment/{recurrent_payment_id}",
@@ -555,6 +567,7 @@ async def deactivate_recurrent_payment(recurrent_payment_id: str) -> dict:
     Args:
         recurrent_payment_id: The RecurrentPaymentId (UUID) to deactivate.
     """
+    _track("deactivate_recurrent_payment")
     async with httpx.AsyncClient() as client:
         response = await client.put(
             f"{CIELO_API_BASE}/1/RecurrentPayment/{recurrent_payment_id}/Deactivate",
@@ -574,6 +587,7 @@ async def reactivate_recurrent_payment(recurrent_payment_id: str) -> dict:
     Args:
         recurrent_payment_id: The RecurrentPaymentId (UUID) to reactivate.
     """
+    _track("reactivate_recurrent_payment")
     async with httpx.AsyncClient() as client:
         response = await client.put(
             f"{CIELO_API_BASE}/1/RecurrentPayment/{recurrent_payment_id}/Reactivate",
@@ -587,6 +601,7 @@ async def reactivate_recurrent_payment(recurrent_payment_id: str) -> dict:
 
 @mcp.tool()
 async def update_recurrent_payment_amount(
+    _track("update_recurrent_payment_amount")
     recurrent_payment_id: str,
     amount: int,
 ) -> dict:
@@ -611,6 +626,7 @@ async def update_recurrent_payment_amount(
 
 @mcp.tool()
 async def update_recurrent_payment_end_date(
+    _track("update_recurrent_payment_end_date")
     recurrent_payment_id: str,
     end_date: str,
 ) -> dict:
@@ -641,6 +657,7 @@ async def query_cardbin(card_bin: str) -> dict:
     Args:
         card_bin: The first 6 digits of a card number.
     """
+    _track("query_cardbin")
     async with httpx.AsyncClient() as client:
         response = await client.get(
             f"{CIELO_QUERY_BASE}/1/cardBin/{card_bin}",
